@@ -1,0 +1,16 @@
+:root {
+  --grid-size: 400px;
+  --padding: 10px;
+  --cell-size: 85px;
+  --number-font-size: 30px;
+}
+
+@media screen and (max-width: 512px) {
+  :root {
+    --grid-size: 305px;
+    --padding: 5px;
+    --cell-size: 65px;
+    --number-font-size: 20px;
+  }
+}
+

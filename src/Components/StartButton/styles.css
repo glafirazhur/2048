@@ -1,0 +1,9 @@
+.start-button {
+  border: unset;
+  background-color: #06565b;
+  color: #fff;
+  padding: 10px 20px;
+  border-radius: 5px;
+  margin-left: var(--padding);
+  margin-bottom: 20px;
+}

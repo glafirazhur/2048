@@ -1,0 +1,13 @@
+.numbers {
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+/*
+@media screen and (max-width: 991px) and (orientation: landscape) {
+  .numbers {
+
+  }
+}
+*/

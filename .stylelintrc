@@ -1,0 +1,13 @@
+{
+  "extends": "stylelint-config-recommended",
+  "rules": {
+    "rule-empty-line-before": [ "always", {
+      "except": [ "after-single-line-comment", "first-nested"]
+    }]
+  },
+  "string-quotes": "single",
+  "font-family-name-quotes": "always-unless-keyword",
+  "font-weight-notation": "numeric",
+  "selector-attribute-quotes": "always",
+  "color-hex-length": "long"
+}
