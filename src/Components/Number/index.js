@@ -10,4 +10,5 @@ Number.propTypes = {
   xPos: PropTypes.number.isRequired,
   yPos: PropTypes.number.isRequired,
 };
+
 export default Number;
