@@ -2,16 +2,16 @@ import React, { useEffect } from 'react';
 import PropTypes from 'prop-types';
 
 import { connect } from 'react-redux';
-import { updateCurrentScore } from '../../Redux/actions/scoreActions';
+import { updateCurrentScoreAction } from '../../Redux/actions/scoreActions';
 
 import './styles.css';
 
 const CurrentScore = (props) => {
-  const { currentScore, scoreLabel } = props;
+  const { currentScore, scoreLabel, updateCurrentScore } = props;
 
   useEffect(() => {
-    props.updateCurrentScore();
-  },[]);
+    updateCurrentScore(50);
+  }, [updateCurrentScore]);
 
   return (
     <div className="score">
@@ -33,8 +33,9 @@ CurrentScore.defaultProps = {
 };
 
 const mapStateToProps = (state) => ({ currentScore: state.currentScore });
+
 const mapDispatchToProps = (dispatch) => ({
-  updateCurrentScore: () => dispatch(updateCurrentScore),
+  updateCurrentScore: (value) => dispatch(updateCurrentScoreAction(value)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(CurrentScore);

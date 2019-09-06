@@ -2,16 +2,16 @@ import React, { useEffect } from 'react';
 import PropTypes from 'prop-types';
 
 import { connect } from 'react-redux';
-import { updateBestScore } from '../../Redux/actions/scoreActions';
+import { updateBestScoreAction } from '../../Redux/actions/scoreActions';
 
 import './styles.css';
 
 const BestScore = (props) => {
-  const { bestScore, scoreLabel } = props;
+  const { bestScore, scoreLabel, updateBestScore } = props;
 
   useEffect(() => {
-    props.updateBestScore();
-  },[]);
+    updateBestScore(10);
+  },[updateBestScore]);
 
   return (
     <div className="score">
@@ -33,8 +33,9 @@ BestScore.defaultProps = {
 };
 
 const mapStateToProps = (state) => ({ bestScore: state.bestScore });
+
 const mapDispatchToProps = (dispatch) => ({
-  updateBestScore: () => dispatch(updateBestScore),
+  updateBestScore: (value) => dispatch(updateBestScoreAction(value)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(BestScore);

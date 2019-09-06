@@ -1,8 +1,8 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { applyMiddleware, compose, createStore } from 'redux';
+import {Provider} from 'react-redux';
 import thunkMiddleware from 'redux-thunk';
-
 import initialState from './Redux/initialState';
 import reducer from './Redux/reducers';
 
@@ -21,7 +21,9 @@ const store = createStore(
 );
 
 ReactDOM.render(
-  <App store={store} />,
+  <Provider store={store}>
+    <App />
+  </Provider>,
   document.getElementById('root'),
 );
 

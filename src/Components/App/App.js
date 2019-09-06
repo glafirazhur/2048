@@ -60,7 +60,7 @@ const App = () => {
       className="wrap"
     >
       <h1 className="game-header">2048</h1>
-      <p className="game-description">Use Up, Down, Left, Right keys of swipe to play</p>
+      <p className="game-description">Use Up, Down, Left, Right keys or swipe to play</p>
       <StartButton />
       <div className="score-wrap">
         <CurrentScore scoreLabel="Your score" />
