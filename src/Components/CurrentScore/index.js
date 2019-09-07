@@ -1,24 +1,21 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import { connect } from 'react-redux';
-
+// CSS
 import './styles.css';
 
-const CurrentScore = ({ scoreLabel, score }) => (
+// redux
+import { connect } from 'react-redux';
+
+const CurrentScore = ({ score }) => (
   <div className="score">
-    <span className="score__label">{scoreLabel}</span>
+    <span className="score__label">Your score</span>
     <span className="score__value">{score.currentScore}</span>
   </div>
 );
 
 CurrentScore.propTypes = {
   score: PropTypes.objectOf(PropTypes.number).isRequired,
-  scoreLabel: PropTypes.string,
-};
-
-CurrentScore.defaultProps = {
-  scoreLabel: 'Your score',
 };
 
 const mapStateToProps = (state) => ({ score: state.score });

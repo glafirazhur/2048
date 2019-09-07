@@ -1,4 +1,6 @@
 import React from 'react';
+
+// CSS
 import './styles.css';
 
 const Field = () => (

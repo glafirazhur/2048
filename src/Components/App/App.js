@@ -2,14 +2,12 @@ import React, { useEffect } from 'react';
 import { Swipeable } from 'react-swipeable';
 import PropTypes from 'prop-types';
 
+// CSS
+import './App.css';
+
 // redux
 import { connect } from 'react-redux';
 import { updateScoreAction } from '../../Redux/actions/scoreActions';
-
-// CSS
-import '../../css/variables.css';
-import '../../css/common.css';
-import './App.css';
 
 // components
 import Field from '../Field';
@@ -68,8 +66,8 @@ const App = ({ updateScore }) => {
       <p className="game-description">Use Up, Down, Left, Right keys or swipe to play</p>
       <StartButton />
       <div className="score-wrap">
-        <CurrentScore scoreLabel="Your score" />
-        <BestScore scoreLabel="Best score" />
+        <CurrentScore />
+        <BestScore />
       </div>
       <div className="game__container">
         <Field />

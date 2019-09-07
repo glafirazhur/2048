@@ -1,6 +1,9 @@
 import React from 'react';
+
+// CSS
 import './styles.css';
 
+// Components
 import Number from '../Number';
 
 const NumberField = () => (
