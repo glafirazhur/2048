@@ -5,16 +5,12 @@ import PropTypes from 'prop-types';
 // CSS
 import './App.css';
 
-// redux
-import { connect } from 'react-redux';
-import { updateScoreAction } from '../../Redux/actions/scoreActions';
-
 // components
 import Field from '../Field';
 import NumberField from '../NumberField';
-import StartButton from '../StartButton';
-import CurrentScore from '../CurrentScore';
-import BestScore from '../BestScore';
+import StartButtonContainer from '../../Containers/StartButtonContainer';
+import CurrentScoreContainer from '../../Containers/CurrentScoreContainer';
+import BestScoreContainer from '../../Containers/BestScoreContainer';
 
 const App = ({ updateScore }) => {
   const moveLeft = () => {
@@ -64,10 +60,10 @@ const App = ({ updateScore }) => {
     >
       <h1 className="game-header">2048</h1>
       <p className="game-description">Use Up, Down, Left, Right keys or swipe to play</p>
-      <StartButton />
+      <StartButtonContainer />
       <div className="score-wrap">
-        <CurrentScore />
-        <BestScore />
+        <CurrentScoreContainer />
+        <BestScoreContainer />
       </div>
       <div className="game__container">
         <Field />
@@ -81,11 +77,4 @@ App.propTypes = {
   updateScore: PropTypes.func.isRequired,
 };
 
-const mapStateToProps = (state) => ({ score: state.store });
-
-const mapDispatchToProps = (dispatch) => ({
-  updateScore:
-    (currentScore) => dispatch(updateScoreAction(currentScore)),
-});
-
-export default connect(mapStateToProps, mapDispatchToProps)(App);
+export default App;

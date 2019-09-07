@@ -4,9 +4,6 @@ import PropTypes from 'prop-types';
 // CSS
 import './styles.css';
 
-// redux
-import { connect } from 'react-redux';
-
 const BestScore = ({ score }) => (
   <div className="score">
     <span className="score__label">Best score</span>
@@ -18,6 +15,4 @@ BestScore.propTypes = {
   score: PropTypes.objectOf(PropTypes.number).isRequired,
 };
 
-const mapStateToProps = (state) => ({ score: state.score });
-
-export default connect(mapStateToProps)(BestScore);
+export default BestScore;
