@@ -1,5 +1,10 @@
 import React, { useEffect } from 'react';
 import { Swipeable } from 'react-swipeable';
+import PropTypes from 'prop-types';
+
+// redux
+import { connect } from 'react-redux';
+import { updateScoreAction } from '../../Redux/actions/scoreActions';
 
 // CSS
 import '../../css/variables.css';
@@ -13,9 +18,9 @@ import StartButton from '../StartButton';
 import CurrentScore from '../CurrentScore';
 import BestScore from '../BestScore';
 
-
-const App = () => {
+const App = ({ updateScore }) => {
   const moveLeft = () => {
+    updateScore(10);
     console.log('LEFT');
   };
 
@@ -74,4 +79,15 @@ const App = () => {
   );
 };
 
-export default App;
+App.propTypes = {
+  updateScore: PropTypes.func.isRequired,
+};
+
+const mapStateToProps = (state) => ({ score: state.store });
+
+const mapDispatchToProps = (dispatch) => ({
+  updateScore:
+    (currentScore) => dispatch(updateScoreAction(currentScore)),
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(App);

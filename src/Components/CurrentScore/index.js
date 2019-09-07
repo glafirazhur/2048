@@ -1,41 +1,26 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 
 import { connect } from 'react-redux';
-import { updateCurrentScoreAction } from '../../Redux/actions/scoreActions';
 
 import './styles.css';
 
-const CurrentScore = (props) => {
-  const { currentScore, scoreLabel, updateCurrentScore } = props;
-
-  useEffect(() => {
-    updateCurrentScore(50);
-  }, [updateCurrentScore]);
-
-  return (
-    <div className="score">
-      <span className="score__label">{scoreLabel}</span>
-      <span className="score__value">{currentScore}</span>
-    </div>
-  );
-};
+const CurrentScore = ({ scoreLabel, score }) => (
+  <div className="score">
+    <span className="score__label">{scoreLabel}</span>
+    <span className="score__value">{score.currentScore}</span>
+  </div>
+);
 
 CurrentScore.propTypes = {
-  currentScore: PropTypes.number,
+  score: PropTypes.objectOf(PropTypes.number).isRequired,
   scoreLabel: PropTypes.string,
-  updateCurrentScore: PropTypes.func.isRequired,
 };
 
 CurrentScore.defaultProps = {
-  currentScore: 0,
   scoreLabel: 'Your score',
 };
 
-const mapStateToProps = (state) => ({ currentScore: state.currentScore });
+const mapStateToProps = (state) => ({ score: state.score });
 
-const mapDispatchToProps = (dispatch) => ({
-  updateCurrentScore: (value) => dispatch(updateCurrentScoreAction(value)),
-});
-
-export default connect(mapStateToProps, mapDispatchToProps)(CurrentScore);
+export default connect(mapStateToProps)(CurrentScore);

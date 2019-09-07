@@ -1,41 +1,26 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 
 import { connect } from 'react-redux';
-import { updateBestScoreAction } from '../../Redux/actions/scoreActions';
 
 import './styles.css';
 
-const BestScore = (props) => {
-  const { bestScore, scoreLabel, updateBestScore } = props;
-
-  useEffect(() => {
-    updateBestScore(10);
-  },[updateBestScore]);
-
-  return (
-    <div className="score">
-      <span className="score__label">{scoreLabel}</span>
-      <span className="score__value">{bestScore}</span>
-    </div>
-  );
-};
+const BestScore = ({ score, scoreLabel }) => (
+  <div className="score">
+    <span className="score__label">{scoreLabel}</span>
+    <span className="score__value">{score.bestScore}</span>
+  </div>
+);
 
 BestScore.propTypes = {
-  bestScore: PropTypes.number,
+  score: PropTypes.objectOf(PropTypes.number).isRequired,
   scoreLabel: PropTypes.string,
-  updateBestScore: PropTypes.func.isRequired,
 };
 
 BestScore.defaultProps = {
-  bestScore: 0,
   scoreLabel: 'Your score',
 };
 
-const mapStateToProps = (state) => ({ bestScore: state.bestScore });
+const mapStateToProps = (state) => ({ score: state.score });
 
-const mapDispatchToProps = (dispatch) => ({
-  updateBestScore: (value) => dispatch(updateBestScoreAction(value)),
-});
-
-export default connect(mapStateToProps, mapDispatchToProps)(BestScore);
+export default connect(mapStateToProps)(BestScore);

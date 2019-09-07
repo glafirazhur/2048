@@ -1,11 +1,10 @@
-import { UPDATE_CURRENT_SCORE, UPDATE_BEST_SCORE } from '../actions';
+import { UPDATE_SCORE, CLEAR_CURRENT_SCORE } from '../actions';
 
-export const updateCurrentScoreAction = (currentValue) => ({
-  type: UPDATE_CURRENT_SCORE,
-  payload: currentValue,
+export const updateScoreAction = (currentScore) => ({
+  type: UPDATE_SCORE,
+  payload: currentScore,
 });
 
-export const updateBestScoreAction = (bestValue) => ({
-  type: UPDATE_BEST_SCORE,
-  payload: bestValue,
+export const clearScoreAction = () => ({
+  type: CLEAR_CURRENT_SCORE,
 });

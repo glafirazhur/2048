@@ -18,8 +18,10 @@ const initialState = {
     { xPos: 4, yPos: 3 },
     { xPos: 4, yPos: 4 },
   ],
-  currentScore: 0,
-  bestScore: 0,
+  score: {
+    currentScore: 0,
+    bestScore: 0,
+  },
 };
 
 export default initialState;
