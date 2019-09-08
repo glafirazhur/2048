@@ -6,10 +6,12 @@ import PropTypes from 'prop-types';
 import './styles.css';
 
 // components
+import { connect } from 'react-redux';
 import Field from '../Field';
 import TilesField from '../TilesField';
 import StartButton from '../StartButton';
 import Score from '../Score';
+import { updateScoreAction } from '../../Redux/actions/scoreActions';
 
 const App = ({ updateScore }) => {
   const moveLeft = () => {
@@ -76,4 +78,11 @@ App.propTypes = {
   updateScore: PropTypes.func.isRequired,
 };
 
-export default App;
+const mapStateToProps = (state) => ({ score: state.store });
+
+const mapDispatchToProps = (dispatch) => ({
+  updateScore:
+    (currentScore) => dispatch(updateScoreAction(currentScore)),
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(App);

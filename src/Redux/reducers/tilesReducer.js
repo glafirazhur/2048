@@ -1,5 +1,6 @@
 import { ADD_TILE, INIT_GAME } from '../actions';
 import initialState from '../initialState';
+import { getRandomInt } from '../../utilities';
 
 const tilesReducer = (state = initialState.tiles, action) => {
   switch (action.type) {
@@ -8,23 +9,31 @@ const tilesReducer = (state = initialState.tiles, action) => {
         ...state,
         action.payload,
       ];
-    case INIT_GAME:
-      return [
-        ...state,
-        {
-          xPos: 1,
-          yPos: 2,
-          tileVal: 2,
-        },
-        {
-          xPos: 3,
-          yPos: 1,
-          tileVal: 2,
-        },
-      ];
+    case INIT_GAME: {
+      const initialTiles = [];
+
+      while (initialTiles.length < 2) {
+        const xPosition = getRandomInt(1, 4);
+        const yPosition = getRandomInt(1, 4);
+        const tileValue = 2;
+
+        // check initialTiles array for duplicates
+        const duplicate = initialTiles.find(({ xPos, yPos }) => xPos === xPosition && yPos === yPosition);
+
+        if (!duplicate) {
+          initialTiles.push({
+            xPos: xPosition,
+            yPos: yPosition,
+            tileVal: tileValue,
+          });
+        }
+      }
+      return initialTiles;
+    }
     default:
       return state;
   }
 };
+
 
 export default tilesReducer;
