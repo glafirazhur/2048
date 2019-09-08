@@ -1,0 +1,30 @@
+.score-wrap {
+  display: flex;
+  margin-bottom: 20px;
+}
+
+.score {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 10px;
+  background-color: #ddbc95;
+  border-radius: 5px;
+  margin-right: var(--padding);
+  color: #222;
+}
+
+.score__label {
+  font-weight: 400;
+}
+
+@media screen and (max-width: 768px) {
+  .score__label {
+    font-size: 12px;
+  }
+}
+
+.score__value {
+  font-size: 20px;
+  font-weight: 700;
+}

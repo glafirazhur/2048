@@ -23,7 +23,12 @@ const persistConfig = {
 };
 
 const persistedReducer = persistReducer(persistConfig, reducer);
-const store = createStore(persistedReducer);
+const store = createStore(
+  persistedReducer,
+  // eslint-disable-next-line no-underscore-dangle
+  window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__(),
+);
+
 const persistor = persistStore(store);
 
 ReactDOM.render(

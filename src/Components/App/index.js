@@ -3,14 +3,13 @@ import { Swipeable } from 'react-swipeable';
 import PropTypes from 'prop-types';
 
 // CSS
-import './App.css';
+import './styles.css';
 
 // components
 import Field from '../Field';
 import NumberField from '../NumberField';
-import StartButtonContainer from '../../Containers/StartButtonContainer';
-import CurrentScoreContainer from '../../Containers/CurrentScoreContainer';
-import BestScoreContainer from '../../Containers/BestScoreContainer';
+import StartButton from '../StartButton';
+import Score from '../Score';
 
 const App = ({ updateScore }) => {
   const moveLeft = () => {
@@ -60,10 +59,10 @@ const App = ({ updateScore }) => {
     >
       <h1 className="game-header">2048</h1>
       <p className="game-description">Use Up, Down, Left, Right keys or swipe to play</p>
-      <StartButtonContainer />
+      <StartButton />
       <div className="score-wrap">
-        <CurrentScoreContainer />
-        <BestScoreContainer />
+        <Score scoreType="current" />
+        <Score scoreType="best" />
       </div>
       <div className="game__container">
         <Field />
