@@ -14,7 +14,11 @@ StartButton.propTypes = {
   initGame: PropTypes.func.isRequired,
 };
 
-const mapStateToProps = (state) => ({ score: state.score });
+const mapStateToProps = (state) => ({
+  score: state.score,
+  gameStatus: state.gameStatus,
+  tiles: state.tiles,
+});
 const mapDispatchToProps = (dispatch) => ({
   initGame: () => dispatch(initGameThunkAction()),
 });
