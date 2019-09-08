@@ -31,6 +31,8 @@ const store = createStore(
 
 const persistor = persistStore(store);
 
+persistor.purge();  //CLEAR redux-persist cache
+
 ReactDOM.render(
   <Provider store={store}>
     <PersistGate persistor={persistor} loading={null}>

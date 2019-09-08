@@ -1,10 +1,10 @@
 import { combineReducers } from 'redux';
-import numbersReducer from './numbersReducer';
+import tilesReducer from './tilesReducer';
 import emptyFieldsReducer from './emptyFieldsReducer';
 import scoreReducer from './scoreReducer';
 
 export default combineReducers({
-  numbers: numbersReducer,
+  tiles: tilesReducer,
   emptyFields: emptyFieldsReducer,
   score: scoreReducer,
 });

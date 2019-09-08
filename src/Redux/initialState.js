@@ -1,5 +1,5 @@
 const initialState = {
-  numbers: [],
+  tiles: [],
   emptyFields: [
     { xPos: 1, yPos: 1 },
     { xPos: 1, yPos: 2 },

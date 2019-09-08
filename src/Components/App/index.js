@@ -7,7 +7,7 @@ import './styles.css';
 
 // components
 import Field from '../Field';
-import NumberField from '../NumberField';
+import TilesField from '../TilesField';
 import StartButton from '../StartButton';
 import Score from '../Score';
 
@@ -66,7 +66,7 @@ const App = ({ updateScore }) => {
       </div>
       <div className="game__container">
         <Field />
-        <NumberField />
+        <TilesField />
       </div>
     </Swipeable>
   );
