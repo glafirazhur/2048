@@ -1,4 +1,4 @@
-import { ADD_TILE, INIT_GAME } from '../actions';
+import { ADD_TILE, INIT_FIRST_TILES } from '../actions';
 import initialState from '../initialState';
 import { getRandomInt } from '../../utilities';
 
@@ -9,7 +9,7 @@ const tilesReducer = (state = initialState.tiles, action) => {
         ...state,
         action.payload,
       ];
-    case INIT_GAME: {
+    case INIT_FIRST_TILES: {
       const initialTiles = [];
 
       while (initialTiles.length < 2) {
@@ -18,7 +18,9 @@ const tilesReducer = (state = initialState.tiles, action) => {
         const tileValue = 2;
 
         // check initialTiles array for duplicates
-        const duplicate = initialTiles.find(({ xPos, yPos }) => xPos === xPosition && yPos === yPosition);
+        const duplicate = initialTiles.find(
+          ({ xPos, yPos }) => xPos === xPosition && yPos === yPosition,
+        );
 
         if (!duplicate) {
           initialTiles.push({

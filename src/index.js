@@ -6,8 +6,9 @@ import './css/variables.css';
 import './css/common.css';
 
 // redux
-import { createStore } from 'redux';
+import { applyMiddleware, compose, createStore } from 'redux';
 import { Provider } from 'react-redux';
+import thunkMiddleware from 'redux-thunk';
 
 // redux-persist
 import { persistStore, persistReducer } from 'redux-persist';
@@ -22,16 +23,20 @@ const persistConfig = {
   storage,
 };
 
+const composeEnhancers = (
+  window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__
+  && window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__({ trace: true, traceLimit: 25 })
+) || compose;
+
 const persistedReducer = persistReducer(persistConfig, reducer);
 const store = createStore(
   persistedReducer,
-  // eslint-disable-next-line no-underscore-dangle
-  window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__(),
+  composeEnhancers(applyMiddleware(thunkMiddleware)),
 );
 
 const persistor = persistStore(store);
 
-persistor.purge(); // CLEAR redux-persist cache
+//persistor.purge(); // CLEAR redux-persist cache
 
 ReactDOM.render(
   <Provider store={store}>
