@@ -5,6 +5,4 @@ export const updateScoreAction = (currentScore) => ({
   payload: currentScore,
 });
 
-export const clearScoreAction = () => ({
-  type: CLEAR_CURRENT_SCORE,
-});
+export const clearScoreAction = () => ({ type: CLEAR_CURRENT_SCORE });

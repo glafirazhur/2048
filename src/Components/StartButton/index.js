@@ -19,7 +19,6 @@ StartButton.defaultProps = {
   children: 'Start again',
 };
 
-
 const mapDispatchToProps = (dispatch) => ({
   initGame: () => dispatch(initGameThunkAction()),
 });

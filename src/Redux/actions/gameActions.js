@@ -1,9 +1,10 @@
 import { INIT_GAME, FINISH_GAME } from '../actions';
-import { initTilesAction } from './tilesActions';
+import { initTilesAction, updateTilesPositionAction, addRandomTileAction } from './tilesActions';
 import { clearScoreAction } from './scoreActions';
 import { updateEmptiesAction, initEmptiesAction } from './emptiesAction';
 
 const initGameAction = () => ({ type: INIT_GAME });
+const finishGameAction = () => ({ type: FINISH_GAME });
 
 export const initGameThunkAction = () => (dispatch, getState) => {
   dispatch(initGameAction());
@@ -13,4 +14,16 @@ export const initGameThunkAction = () => (dispatch, getState) => {
   dispatch(updateEmptiesAction(getState().tiles));
 };
 
-export const finishGameAction = () => ({ type: FINISH_GAME });
+export const updateTilesPositionAThunk = (direction) => (dispatch, getState) => {
+  dispatch(updateTilesPositionAction(direction, getState().emptyFields));
+  dispatch(updateEmptiesAction(getState().tiles));
+  dispatch(addRandomTileAction(getState().emptyFields));
+  dispatch(updateEmptiesAction(getState().tiles));
+  // check game status
+  const freeEmpties = getState().emptyFields.filter(({ isEmpty }) => isEmpty);
+  if (!freeEmpties.length) {
+    dispatch(finishGameAction());
+  }
+};
+
+

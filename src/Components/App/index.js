@@ -13,8 +13,7 @@ import StartButton from '../StartButton';
 import Score from '../Score';
 
 // Actions
-import { initGameThunkAction } from '../../Redux/actions/gameActions';
-import { updateTilesPositionAThunk } from '../../Redux/actions/tilesActions';
+import { initGameThunkAction, updateTilesPositionAThunk } from '../../Redux/actions/gameActions';
 import FinishGame from '../FinishGame';
 
 // const App = ({ /*tiles, updateTilePosition*/ }) => {
@@ -90,8 +89,7 @@ App.propTypes = {
 const mapStateToProps = (state) => ({ tiles: state.tiles, gameStatus: state.gameStatus });
 
 const mapDispatchToProps = (dispatch) => ({
-  initGame:
-    () => dispatch(initGameThunkAction()),
+  initGame: () => dispatch(initGameThunkAction()),
   updateTilesPosition: (direction) => dispatch(updateTilesPositionAThunk(direction)),
 });
 
