@@ -8,11 +8,17 @@ import './styles.css';
 import { connect } from 'react-redux';
 import { initGameThunkAction } from '../../Redux/actions/gameActions';
 
-const StartButton = ({ initGame }) => <button type="button" className="start-button" onClick={initGame}>Start again</button>;
+const StartButton = ({ initGame, children }) => <button type="button" className="start-button" onClick={initGame}>{ children }</button>;
 
 StartButton.propTypes = {
   initGame: PropTypes.func.isRequired,
+  children: PropTypes.string,
 };
+
+StartButton.defaultProps = {
+  children: 'Start again',
+};
+
 
 const mapDispatchToProps = (dispatch) => ({
   initGame: () => dispatch(initGameThunkAction()),

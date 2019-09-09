@@ -15,9 +15,10 @@ import Score from '../Score';
 // Actions
 import { initGameThunkAction } from '../../Redux/actions/gameActions';
 import { updateTilesPositionAThunk } from '../../Redux/actions/tilesActions';
+import FinishGame from '../FinishGame';
 
 // const App = ({ /*tiles, updateTilePosition*/ }) => {
-const App = ({ initGame, updateTilesPosition }) => {
+const App = ({ initGame, updateTilesPosition, gameStatus }) => {
   const moveLeft = () => {
     updateTilesPosition('left');
   };
@@ -74,18 +75,19 @@ const App = ({ initGame, updateTilesPosition }) => {
       <div className="game__container">
         <Field />
         <TilesField />
+        { !gameStatus ? <FinishGame /> : null }
       </div>
     </Swipeable>
   );
 };
 
 App.propTypes = {
-  //tiles: PropTypes.arrayOf(PropTypes.objectOf(PropTypes.number)).isRequired,
+  gameStatus: PropTypes.bool.isRequired,
   initGame: PropTypes.func.isRequired,
   updateTilesPosition: PropTypes.func.isRequired,
 };
 
-const mapStateToProps = (state) => ({ tiles: state.tiles });
+const mapStateToProps = (state) => ({ tiles: state.tiles, gameStatus: state.gameStatus });
 
 const mapDispatchToProps = (dispatch) => ({
   initGame:

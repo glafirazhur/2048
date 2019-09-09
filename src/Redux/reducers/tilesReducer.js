@@ -1,14 +1,26 @@
-import { ADD_TILE, INIT_FIRST_TILES, UPDATE_POSITION } from '../actions';
+import { ADD_TILE, ADD_RANDOM_TILE, INIT_FIRST_TILES, UPDATE_POSITION } from '../actions';
 import initialState from '../initialState';
-import { getRandomInt, updateLocalEmpties } from '../../utilities';
+import { getRandomInt, updateLocalEmpties, getRandomArrayItem } from '../../utilities';
 
 const tilesReducer = (state = initialState.tiles, action) => {
   switch (action.type) {
+    case ADD_RANDOM_TILE: {
+      const emptyFields = action.payload.filter(({ isEmpty }) => isEmpty === true);
+      const randomEmpty = getRandomArrayItem(emptyFields);
+      if (randomEmpty) {
+        return [
+          ...state,
+          {
+            rowPos: randomEmpty.rowPos,
+            colPos: randomEmpty.colPos,
+            tileVal: getRandomArrayItem([2, 4]),
+          },
+        ];
+      }
+      return state;
+    }
     case ADD_TILE:
-      return [
-        ...state,
-        action.payload,
-      ];
+      return state;
     case INIT_FIRST_TILES: {
       const initialTiles = [];
 

@@ -10,8 +10,7 @@ export const initGameThunkAction = () => (dispatch, getState) => {
   dispatch(clearScoreAction());
   dispatch(initEmptiesAction());
   dispatch(initTilesAction());
-  const { tiles } = getState();
-  dispatch(updateEmptiesAction(tiles));
+  dispatch(updateEmptiesAction(getState().tiles));
 };
 
-export const finishGame = () => ({ type: FINISH_GAME });
+export const finishGameAction = () => ({ type: FINISH_GAME });
