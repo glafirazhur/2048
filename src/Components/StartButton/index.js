@@ -14,13 +14,8 @@ StartButton.propTypes = {
   initGame: PropTypes.func.isRequired,
 };
 
-const mapStateToProps = (state) => ({
-  score: state.score,
-  gameStatus: state.gameStatus,
-  tiles: state.tiles,
-});
 const mapDispatchToProps = (dispatch) => ({
   initGame: () => dispatch(initGameThunkAction()),
 });
 
-export default React.memo(connect(mapStateToProps, mapDispatchToProps)(StartButton));
+export default React.memo(connect(undefined, mapDispatchToProps)(StartButton));

@@ -14,24 +14,24 @@ import Score from '../Score';
 
 // Actions
 import { initGameThunkAction } from '../../Redux/actions/gameActions';
-import { updateTilePositionAction } from '../../Redux/actions/tilesActions';
+import { updateTilesPositionAThunk } from '../../Redux/actions/tilesActions';
 
 // const App = ({ /*tiles, updateTilePosition*/ }) => {
-const App = ({ tiles, initGame, updatePosition }) => {
+const App = ({ initGame, updateTilesPosition }) => {
   const moveLeft = () => {
-    tiles.map(updatePosition('left'));
+    updateTilesPosition('left');
   };
 
   const moveRight = () => {
-    console.log('RIGHT');
+    updateTilesPosition('right');
   };
 
   const moveUp = () => {
-    console.log('UP');
+    updateTilesPosition('up');
   };
 
   const moveDown = () => {
-    console.log('DOWN');
+    updateTilesPosition('down');
   };
 
   useEffect(() => {
@@ -80,9 +80,9 @@ const App = ({ tiles, initGame, updatePosition }) => {
 };
 
 App.propTypes = {
-  tiles: PropTypes.arrayOf(PropTypes.objectOf(PropTypes.number)).isRequired,
+  //tiles: PropTypes.arrayOf(PropTypes.objectOf(PropTypes.number)).isRequired,
   initGame: PropTypes.func.isRequired,
-  updatePosition: PropTypes.func.isRequired,
+  updateTilesPosition: PropTypes.func.isRequired,
 };
 
 const mapStateToProps = (state) => ({ tiles: state.tiles });
@@ -90,7 +90,7 @@ const mapStateToProps = (state) => ({ tiles: state.tiles });
 const mapDispatchToProps = (dispatch) => ({
   initGame:
     () => dispatch(initGameThunkAction()),
-  updatePosition: (direction) => dispatch(updateTilePositionAction(direction)),
+  updateTilesPosition: (direction) => dispatch(updateTilesPositionAThunk(direction)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(App);

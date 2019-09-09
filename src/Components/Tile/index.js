@@ -4,12 +4,12 @@ import PropTypes from 'prop-types';
 // CSS
 import './styles.css';
 
-const Tile = ({ tileVal, xPos, yPos }) => <div className={`number number--${tileVal} pos--${xPos}-${yPos}`}>{tileVal}</div>;
+const Tile = ({ tileVal, rowPos, colPos }) => <div className={`number number--${tileVal} pos--${rowPos}-${colPos}`}>{tileVal}</div>;
 
 Tile.propTypes = {
   tileVal: PropTypes.number.isRequired,
-  xPos: PropTypes.number.isRequired,
-  yPos: PropTypes.number.isRequired,
+  rowPos: PropTypes.number.isRequired,
+  colPos: PropTypes.number.isRequired,
 };
 
 export default Tile;

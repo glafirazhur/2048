@@ -6,9 +6,12 @@ const emptyFieldsReducer = (state = initialState.emptyFields, action) => {
     case UPDATE_EMPTIES: {
       const tiles = action.payload;
       const updatedEmpties = state.map((item) => {
-        const tile = tiles.find(({ xPos, yPos }) => xPos === item.xPos && yPos === item.yPos);
+        const tile = tiles.find(({ rowPos, colPos }) => rowPos === item.rowPos && colPos === item.colPos);
         if (tile) return { ...item, isEmpty: false };
-        return item;
+        return {
+          ...item,
+          isEmpty: true,
+        };
       });
       return updatedEmpties;
     }
