@@ -1,9 +1,4 @@
-import {
-  ADD_RANDOM_TILE, INIT_FIRST_TILES, UPDATE_POSITION,
-  MERGE_TILES,
-} from '../actions';
-
-export const mergeTilesAction = (direction) => ({ type: MERGE_TILES, payload: direction });
+import { ADD_RANDOM_TILE, INIT_FIRST_TILES, UPDATE_POSITION } from '../actions';
 
 export const initTilesAction = () => ({ type: INIT_FIRST_TILES });
 

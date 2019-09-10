@@ -13,6 +13,7 @@ export const updateLocalEmpties = (emptyFields, oldTile, newTile) => emptyFields
     emptyField = {
       ...emptyField,
       isEmpty: false,
+      isMerged: newTile.isMerged,
       tileVal: newTile.tileVal,
     };
   }
@@ -49,34 +50,3 @@ export const sortTilesForMove = (direction, tiles) => {
       return [];
   }
 };
-
-// export const sortTilesForMerge = (direction, tiles) => {
-//   switch (direction) {
-//     case 'left': {
-//       return tiles.sort((a, b) => {
-//         if (a.rowPos !== b.rowPos) return a.rowPos - b.rowPos;
-//         return b.colPos - a.colPos;
-//       });
-//     }
-//     case 'right': {
-//       return tiles.sort((a, b) => {
-//         if (a.rowPos !== b.rowPos) return a.rowPos - b.rowPos;
-//         return a.colPos - b.colPos;
-//       });
-//     }
-//     case 'up': {
-//       return tiles.sort((a, b) => {
-//         if (a.rowPos !== b.rowPos) return a.rowPos - b.rowPos;
-//         return a.colPos - b.colPos;
-//       });
-//     }
-//     case 'down': {
-//       return tiles.sort((a, b) => {
-//         if (a.rowPos !== b.rowPos) return a.rowPos - b.rowPos;
-//         return a.colPos - b.colPos;
-//       });
-//     }
-//     default:
-//       return [];
-//   }
-// };

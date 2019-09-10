@@ -1,8 +1,5 @@
 import { INIT_GAME, FINISH_GAME } from '../actions';
-import {
-  initTilesAction, updateTilesPositionAction, addRandomTileAction,
-  mergeTilesAction,
-} from './tilesActions';
+import { initTilesAction, updateTilesPositionAction, addRandomTileAction } from './tilesActions';
 import { clearScoreAction } from './scoreActions';
 import { updateEmptiesAction, initEmptiesAction } from './emptiesAction';
 
@@ -23,9 +20,6 @@ export const updateTilesPositionAThunk = (direction) => (dispatch, getState) => 
 
   dispatch(addRandomTileAction(getState().emptyFields));
   dispatch(updateEmptiesAction(getState().tiles));
-
-  // dispatch(mergeTilesAction(direction));
-  // dispatch(addRandomTileAction(getState().emptyFields));
 
   // check game status
   const freeEmpties = getState().emptyFields.filter(({ isEmpty }) => isEmpty);

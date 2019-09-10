@@ -1,11 +1,8 @@
-import {
-  ADD_TILE, ADD_RANDOM_TILE, INIT_FIRST_TILES,
-  UPDATE_POSITION, MERGE_TILES,
-} from '../actions';
+import { ADD_RANDOM_TILE, INIT_FIRST_TILES, UPDATE_POSITION } from '../actions';
 import initialState from '../initialState';
 import {
-  getRandomInt, updateLocalEmpties, getRandomArrayItem,
-  sortTilesForMove,
+  getRandomInt, getRandomArrayItem,
+  sortTilesForMove, updateLocalEmpties,
 } from '../../utilities';
 
 const tilesReducer = (state = initialState.tiles, action) => {
@@ -25,8 +22,6 @@ const tilesReducer = (state = initialState.tiles, action) => {
       }
       return state;
     }
-    case ADD_TILE:
-      return state;
     case INIT_FIRST_TILES: {
       const initialTiles = [];
 
@@ -50,16 +45,17 @@ const tilesReducer = (state = initialState.tiles, action) => {
       }
       return initialTiles;
     }
-
-    // UPDATE_POSITION: moves all the tiles depends on the direction.
+    // UPDATE_POSITION: moves and merge (if possible) all the tiles depends on the direction.
     case UPDATE_POSITION: {
       // Array of tiles sorts according to the move direction.
       // It helps to move the right (first) tile first.
       const sortedTiles = sortTilesForMove(action.payload.direction, state);
-      let tilesForRemove = [];
+      const tilesForRemove = [];
 
-      // Save the local empties
-      let { emptyFields } = action.payload;
+      // Save the local empties, reset isMerged for this move
+      let emptyFields = action.payload.emptyFields.map(
+        (emptyField) => ({ ...emptyField, isMerged: false }),
+      );
 
       const updatedTiles = sortedTiles.map((tile) => {
         // switch is using cols or rows depend on the direction for every tile
@@ -86,6 +82,7 @@ const tilesReducer = (state = initialState.tiles, action) => {
             }
             // If there is a position and it's not the same that tile have
             if (prevCell) {
+              let isTileMerged = false;
               // set new tile default value
               let newTileValue = tile.tileVal;
               // set position to the next cell after the cell to move tile
@@ -93,8 +90,12 @@ const tilesReducer = (state = initialState.tiles, action) => {
               const tileForMergePos = prevCell - 1;
               // check if the next cell is not empty
               const tileForMerge = emptyFields.find(
-                ({ rowPos, colPos, isEmpty }) => (
-                  colPos === tileForMergePos && rowPos === tile.rowPos && !isEmpty
+                ({
+                  rowPos, colPos, isEmpty,
+                  isMerged,
+                }) => (
+                  colPos === tileForMergePos && rowPos === tile.rowPos
+                  && !isEmpty && !isMerged
                 ),
               );
 
@@ -110,11 +111,19 @@ const tilesReducer = (state = initialState.tiles, action) => {
                 prevCell = tileForMergePos;
                 // if tile was merged - set new tile value
                 newTileValue = tile.tileVal * 2;
+                isTileMerged = true;
               }
 
               // update local empties based on the new tile
               emptyFields = updateLocalEmpties(
-                emptyFields, tile, { rowPos: tile.rowPos, colPos: prevCell, tileVal: newTileValue },
+                emptyFields,
+                tile,
+                {
+                  rowPos: tile.rowPos,
+                  colPos: prevCell,
+                  tileVal: newTileValue,
+                  isMerged: isTileMerged,
+                },
               );
 
               // Add new position and value (if was merged or default) for the tile
@@ -144,6 +153,7 @@ const tilesReducer = (state = initialState.tiles, action) => {
             }
             // Update empties depends on the new tile position
             if (nextCell) {
+              let isTileMerged = false;
               // set new tile default value
               let newTileValue = tile.tileVal;
               // set position to the next cell after the cell to move tile
@@ -151,8 +161,12 @@ const tilesReducer = (state = initialState.tiles, action) => {
               const tileForMergePos = nextCell + 1;
               // check if the next cell is not empty
               const tileForMerge = emptyFields.find(
-                ({ rowPos, colPos, isEmpty }) => (
-                  colPos === tileForMergePos && rowPos === tile.rowPos && !isEmpty
+                ({
+                  rowPos, colPos, isEmpty,
+                  isMerged,
+                }) => (
+                  colPos === tileForMergePos && rowPos === tile.rowPos
+                  && !isEmpty && !isMerged
                 ),
               );
 
@@ -168,11 +182,19 @@ const tilesReducer = (state = initialState.tiles, action) => {
                 nextCell = tileForMergePos;
                 // if tile was merged - set new tile value
                 newTileValue = tile.tileVal * 2;
+                isTileMerged = true;
               }
 
               // update local empties based on the new tile
               emptyFields = updateLocalEmpties(
-                emptyFields, tile, { rowPos: tile.rowPos, colPos: nextCell, tileVal: newTileValue },
+                emptyFields,
+                tile,
+                {
+                  rowPos: tile.rowPos,
+                  colPos: nextCell,
+                  tileVal: newTileValue,
+                  isMerged: isTileMerged,
+                },
               );
 
               // Add new position and value (if was merged or default) for the tile
@@ -202,11 +224,15 @@ const tilesReducer = (state = initialState.tiles, action) => {
 
             // Update empties depends on the new tile position
             if (prevCell) {
+              let isTileMerged = false;
               let newTileValue = tile.tileVal;
               const tileForMergePos = prevCell - 1;
               const tileForMerge = emptyFields.find(
-                ({ rowPos, colPos, isEmpty }) => (
-                  colPos === tile.colPos && rowPos === tileForMergePos && !isEmpty
+                ({
+                  rowPos, colPos, isEmpty,
+                  isMerged,
+                }) => (
+                  colPos === tile.colPos && rowPos === tileForMergePos && !isEmpty && !isMerged
                 ),
               );
 
@@ -218,10 +244,18 @@ const tilesReducer = (state = initialState.tiles, action) => {
                 });
                 prevCell = tileForMergePos;
                 newTileValue = tile.tileVal * 2;
+                isTileMerged = true;
               }
 
               emptyFields = updateLocalEmpties(
-                emptyFields, tile, { rowPos: prevCell, colPos: tile.colPos, tileVal: newTileValue },
+                emptyFields,
+                tile,
+                {
+                  rowPos: prevCell,
+                  colPos: tile.colPos,
+                  tileVal: newTileValue,
+                  isMerged: isTileMerged,
+                },
               );
 
               // Add new position for the tile
@@ -250,11 +284,16 @@ const tilesReducer = (state = initialState.tiles, action) => {
             }
             // Update empties depends on the new tile position
             if (nextCell) {
+              let isTileMerged = false;
               let newTileValue = tile.tileVal;
               const tileForMergePos = nextCell + 1;
               const tileForMerge = emptyFields.find(
-                ({ rowPos, colPos, isEmpty }) => (
-                  colPos === tile.colPos && rowPos === tileForMergePos && !isEmpty
+                ({
+                  rowPos, colPos, isEmpty,
+                  isMerged,
+                }) => (
+                  colPos === tile.colPos && rowPos === tileForMergePos
+                  && !isEmpty && !isMerged
                 ),
               );
 
@@ -266,10 +305,18 @@ const tilesReducer = (state = initialState.tiles, action) => {
                 });
                 nextCell = tileForMergePos;
                 newTileValue = tile.tileVal * 2;
+                isTileMerged = true;
               }
 
               emptyFields = updateLocalEmpties(
-                emptyFields, tile, { rowPos: nextCell, colPos: tile.colPos, tileVal: newTileValue },
+                emptyFields,
+                tile,
+                {
+                  rowPos: nextCell,
+                  colPos: tile.colPos,
+                  tileVal: newTileValue,
+                  isMerged: isTileMerged,
+                },
               );
 
               // Add new position for the tile
