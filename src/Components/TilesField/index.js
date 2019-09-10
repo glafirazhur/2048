@@ -6,7 +6,6 @@ import './styles.css';
 
 // redux
 import { connect } from 'react-redux';
-import { addTileAction } from '../../Redux/actions/tilesActions';
 
 // Components
 import Tile from '../Tile';
@@ -26,8 +25,5 @@ TilesField.defaultProps = {
 };
 
 const mapStateToProps = (state) => ({ tiles: state.tiles });
-const mapDispatchToProps = (dispatch) => ({
-  addTile: (rowPos, colPos, tileVal) => dispatch(addTileAction(rowPos, colPos, tileVal)),
-});
 
-export default connect(mapStateToProps, mapDispatchToProps)(TilesField);
+export default connect(mapStateToProps)(TilesField);

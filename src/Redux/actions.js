@@ -12,6 +12,7 @@ export const REMOVE_NUMBER = 'REMOVE_NUMBER';
 export const ADD_TILE = 'ADD_TILE';
 export const ADD_RANDOM_TILE = 'ADD_RANDOM_TILE';
 export const INIT_FIRST_TILES = 'INIT_FIRST_TILES';
+export const MERGE_TILES = 'MERGE_TILES';
 
 // Score actions
 export const UPDATE_SCORE = 'UPDATE_SCORE';

@@ -1,6 +1,12 @@
-import { ADD_TILE, ADD_RANDOM_TILE, INIT_FIRST_TILES, UPDATE_POSITION } from '../actions';
+import {
+  ADD_TILE, ADD_RANDOM_TILE, INIT_FIRST_TILES,
+  UPDATE_POSITION, MERGE_TILES,
+} from '../actions';
 import initialState from '../initialState';
-import { getRandomInt, updateLocalEmpties, getRandomArrayItem } from '../../utilities';
+import {
+  getRandomInt, updateLocalEmpties, getRandomArrayItem,
+  sortTilesForMove,
+} from '../../utilities';
 
 const tilesReducer = (state = initialState.tiles, action) => {
   switch (action.type) {
@@ -49,28 +55,8 @@ const tilesReducer = (state = initialState.tiles, action) => {
     case UPDATE_POSITION: {
       // Array of tiles sorts according to the move direction.
       // It helps to move the right (first) tile first.
-      let sortedTiles = [];
-
-      if (action.payload.direction === 'left' || action.payload.direction === 'up') {
-        sortedTiles = state.sort((a, b) => {
-          if (a.rowPos !== b.rowPos) return a.rowPos - b.rowPos;
-          return a.colPos - b.colPos;
-        });
-      }
-
-      if (action.payload.direction === 'right') {
-        sortedTiles = state.sort((a, b) => {
-          if (a.rowPos !== b.rowPos) return a.rowPos - b.rowPos;
-          return b.colPos - a.colPos;
-        });
-      }
-
-      if (action.payload.direction === 'down') {
-        sortedTiles = state.sort((a, b) => {
-          if (a.rowPos !== b.rowPos) return b.rowPos - a.rowPos;
-          return a.colPos - b.colPos;
-        });
-      }
+      const sortedTiles = sortTilesForMove(action.payload.direction, state);
+      let tilesForRemove = [];
 
       // Save the local empties
       let { emptyFields } = action.payload;
@@ -99,22 +85,51 @@ const tilesReducer = (state = initialState.tiles, action) => {
               }
             }
             // If there is a position and it's not the same that tile have
-            if (prevCell && prevCell !== tile.colPos) {
-              // Update empties depends on the new tile position
-              emptyFields = updateLocalEmpties(
-                emptyFields, tile, { rowPos: tile.rowPos, colPos: prevCell },
+            if (prevCell) {
+              // set new tile default value
+              let newTileValue = tile.tileVal;
+              // set position to the next cell after the cell to move tile
+              // to check the next cell is the same tile or not
+              const tileForMergePos = prevCell - 1;
+              // check if the next cell is not empty
+              const tileForMerge = emptyFields.find(
+                ({ rowPos, colPos, isEmpty }) => (
+                  colPos === tileForMergePos && rowPos === tile.rowPos && !isEmpty
+                ),
               );
-              // Add new position for the tile
+
+              // if tile for merge was found and it's value the same as current tile
+              if (tileForMerge && tileForMerge.tileVal === tile.tileVal) {
+                // merged tile will me removed from state
+                tilesForRemove.push({
+                  rowPos: tileForMerge.rowPos,
+                  colPos: tileForMerge.colPos,
+                  tileVal: tileForMerge.tileVal,
+                });
+                // if tile was merged - set new tile position
+                prevCell = tileForMergePos;
+                // if tile was merged - set new tile value
+                newTileValue = tile.tileVal * 2;
+              }
+
+              // update local empties based on the new tile
+              emptyFields = updateLocalEmpties(
+                emptyFields, tile, { rowPos: tile.rowPos, colPos: prevCell, tileVal: newTileValue },
+              );
+
+              // Add new position and value (if was merged or default) for the tile
               return {
                 ...tile,
                 colPos: prevCell,
+                tileVal: newTileValue,
               };
             }
             // If there is no new position - return just unchanged tile
             return tile;
           }
           case 'right': {
-            // Get the last possible FREE position for the tile in row to the right from its position
+            // Get the last possible FREE position
+            // for the tile in row to the right from its position
             let nextCell = tile.colPos;
             // Index to start search
             let i = nextCell;
@@ -128,14 +143,43 @@ const tilesReducer = (state = initialState.tiles, action) => {
               }
             }
             // Update empties depends on the new tile position
-            if (nextCell && nextCell !== tile.colPos) {
-              emptyFields = updateLocalEmpties(
-                emptyFields, tile, { rowPos: tile.rowPos, colPos: nextCell },
+            if (nextCell) {
+              // set new tile default value
+              let newTileValue = tile.tileVal;
+              // set position to the next cell after the cell to move tile
+              // to check the next cell is the same tile or not
+              const tileForMergePos = nextCell + 1;
+              // check if the next cell is not empty
+              const tileForMerge = emptyFields.find(
+                ({ rowPos, colPos, isEmpty }) => (
+                  colPos === tileForMergePos && rowPos === tile.rowPos && !isEmpty
+                ),
               );
-              // Add new position for the tile
+
+              // if tile for merge was found and it's value the same as current tile
+              if (tileForMerge && tileForMerge.tileVal === tile.tileVal) {
+                // merged tile will me removed from state
+                tilesForRemove.push({
+                  rowPos: tileForMerge.rowPos,
+                  colPos: tileForMerge.colPos,
+                  tileVal: tileForMerge.tileVal,
+                });
+                // if tile was merged - set new tile position
+                nextCell = tileForMergePos;
+                // if tile was merged - set new tile value
+                newTileValue = tile.tileVal * 2;
+              }
+
+              // update local empties based on the new tile
+              emptyFields = updateLocalEmpties(
+                emptyFields, tile, { rowPos: tile.rowPos, colPos: nextCell, tileVal: newTileValue },
+              );
+
+              // Add new position and value (if was merged or default) for the tile
               return {
                 ...tile,
                 colPos: nextCell,
+                tileVal: newTileValue,
               };
             }
             // If there is no new position - return just unchanged tile
@@ -155,15 +199,36 @@ const tilesReducer = (state = initialState.tiles, action) => {
                 break;
               }
             }
+
             // Update empties depends on the new tile position
-            if (prevCell && prevCell !== tile.rowPos) {
-              emptyFields = updateLocalEmpties(
-                emptyFields, tile, { rowPos: prevCell, colPos: tile.colPos },
+            if (prevCell) {
+              let newTileValue = tile.tileVal;
+              const tileForMergePos = prevCell - 1;
+              const tileForMerge = emptyFields.find(
+                ({ rowPos, colPos, isEmpty }) => (
+                  colPos === tile.colPos && rowPos === tileForMergePos && !isEmpty
+                ),
               );
+
+              if (tileForMerge && tileForMerge.tileVal === tile.tileVal) {
+                tilesForRemove.push({
+                  rowPos: tileForMerge.rowPos,
+                  colPos: tileForMerge.colPos,
+                  tileVal: tileForMerge.tileVal,
+                });
+                prevCell = tileForMergePos;
+                newTileValue = tile.tileVal * 2;
+              }
+
+              emptyFields = updateLocalEmpties(
+                emptyFields, tile, { rowPos: prevCell, colPos: tile.colPos, tileVal: newTileValue },
+              );
+
               // Add new position for the tile
               return {
                 ...tile,
                 rowPos: prevCell,
+                tileVal: newTileValue,
               };
             }
             // If there is no new position - return just unchanged tile
@@ -184,14 +249,34 @@ const tilesReducer = (state = initialState.tiles, action) => {
               }
             }
             // Update empties depends on the new tile position
-            if (nextCell && nextCell !== tile.rowPos) {
-              emptyFields = updateLocalEmpties(
-                emptyFields, tile, { rowPos: nextCell, colPos: tile.colPos },
+            if (nextCell) {
+              let newTileValue = tile.tileVal;
+              const tileForMergePos = nextCell + 1;
+              const tileForMerge = emptyFields.find(
+                ({ rowPos, colPos, isEmpty }) => (
+                  colPos === tile.colPos && rowPos === tileForMergePos && !isEmpty
+                ),
               );
+
+              if (tileForMerge && tileForMerge.tileVal === tile.tileVal) {
+                tilesForRemove.push({
+                  rowPos: tileForMerge.rowPos,
+                  colPos: tileForMerge.colPos,
+                  tileVal: tileForMerge.tileVal,
+                });
+                nextCell = tileForMergePos;
+                newTileValue = tile.tileVal * 2;
+              }
+
+              emptyFields = updateLocalEmpties(
+                emptyFields, tile, { rowPos: nextCell, colPos: tile.colPos, tileVal: newTileValue },
+              );
+
               // Add new position for the tile
               return {
                 ...tile,
                 rowPos: nextCell,
+                tileVal: newTileValue,
               };
             }
             // If there is no new position - return just unchanged tile
@@ -201,7 +286,16 @@ const tilesReducer = (state = initialState.tiles, action) => {
             return tile;
         }
       });
-      return updatedTiles;
+
+      return updatedTiles.filter((tile) => {
+        const removedVal = tilesForRemove.find(({ colPos, rowPos, tileVal }) => (
+          tile.colPos === colPos && tile.rowPos === rowPos && tile.tileVal === tileVal
+        ));
+        if (removedVal) {
+          return tile.rowPos !== removedVal.rowPos && tile.colPos !== removedVal.colPos;
+        }
+        return tile;
+      });
     }
     default:
       return state;

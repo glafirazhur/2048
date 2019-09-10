@@ -16,7 +16,6 @@ import Score from '../Score';
 import { initGameThunkAction, updateTilesPositionAThunk } from '../../Redux/actions/gameActions';
 import FinishGame from '../FinishGame';
 
-// const App = ({ /*tiles, updateTilePosition*/ }) => {
 const App = ({ initGame, updateTilesPosition, gameStatus }) => {
   const moveLeft = () => {
     updateTilesPosition('left');
